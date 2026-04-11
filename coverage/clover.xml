@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1775901460236" clover="3.2.0">
+  <project timestamp="1775901460236" name="All files">
+    <metrics statements="18" coveredstatements="18" conditionals="8" coveredconditionals="8" methods="7" coveredmethods="6" elements="33" coveredelements="32" complexity="0" loc="18" ncloc="18" packages="1" files="1" classes="1"/>
+    <file name="api.ts" path="/Users/nguyenhuyhoang/OtherProjects/lamdba-test-mcp/src/api.ts">
+      <metrics statements="18" coveredstatements="18" conditionals="8" coveredconditionals="8" methods="7" coveredmethods="6"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="37" count="5" type="stmt"/>
+      <line num="40" count="5" type="stmt"/>
+      <line num="41" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="42" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="43" count="2" type="stmt"/>
+      <line num="45" count="3" type="stmt"/>
+      <line num="49" count="2" type="stmt"/>
+      <line num="52" count="2" type="stmt"/>
+      <line num="53" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="54" count="1" type="stmt"/>
+      <line num="56" count="1" type="stmt"/>
+      <line num="61" count="4" type="stmt"/>
+      <line num="62" count="2" type="cond" truecount="2" falsecount="0"/>
+      <line num="66" count="1" type="stmt"/>
+      <line num="67" count="1" type="stmt"/>
+      <line num="71" count="2" type="stmt"/>
+    </file>
+  </project>
+</coverage>
