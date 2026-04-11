@@ -38,11 +38,32 @@ describe('LambdaTestClient', () => {
       expect(sessions).toEqual(mockResponse.data.data);
     });
 
+    it('should return null if body is empty', async () => {
+      nock('https://mobile-api.lambdatest.com')
+        .get('/mobile-automation/api/v1/sessions')
+        .query(true)
+        .reply(200, ' ');
+
+      const sessions = await (client as any).get('/sessions?build_id=123');
+      expect(sessions).toBeNull();
+    });
+
+    it('should throw error on invalid JSON', async () => {
+      nock('https://mobile-api.lambdatest.com')
+        .get('/mobile-automation/api/v1/sessions')
+        .query(true)
+        .reply(200, '{ invalid json }');
+
+      await expect((client as any).get('/sessions?build_id=123')).rejects.toThrow(
+        'LambdaTest API returned invalid JSON',
+      );
+    });
+
     it('should return an empty array if data is missing', async () => {
       nock('https://mobile-api.lambdatest.com')
         .get('/mobile-automation/api/v1/sessions')
         .query(true)
-        .reply(200, {});
+        .reply(200, { data: {} });
 
       const sessions = await client.getBuildSessions('123');
       expect(sessions).toEqual([]);

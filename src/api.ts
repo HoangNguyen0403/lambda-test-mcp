@@ -9,10 +9,10 @@ export interface LTSession {
 }
 
 export interface LTSessionDetail extends LTSession {
-  video_url: string;
-  console_logs_url: string;
-  device: string;
-  os_version: string;
+  video_url?: string;
+  console_logs_url?: string;
+  device?: string;
+  os_version?: string;
 }
 
 export interface LTBuildSessionsResponse {
@@ -42,7 +42,14 @@ export class LambdaTestClient {
       if (body) process.stderr.write(`LambdaTest API response body: ${body}\n`);
       throw new Error(`LambdaTest API ${res.status}: ${res.statusText}`);
     }
-    return JSON.parse(body) as T;
+    if (!body.trim()) {
+      return null as T;
+    }
+    try {
+      return JSON.parse(body) as T;
+    } catch {
+      throw new Error(`LambdaTest API returned invalid JSON for ${path}`);
+    }
   }
 
   private async getText(path: string): Promise<string> {

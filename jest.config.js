@@ -16,4 +16,12 @@ export default {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['/node_modules/', '/index.ts'],
+  coverageThreshold: {
+    global: {
+      statements: 95,
+      branches: 100,
+      functions: 85,
+      lines: 100,
+    },
+  },
 };

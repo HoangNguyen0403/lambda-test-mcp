@@ -1,59 +1,4 @@
-// Define the validation functions and extractErrorBlock since they are not exported
-// In a real scenario, we might want to export them for testing or move to a utils file.
-// For 100% coverage of index.ts, we'll need to mock the environment and the LambdaTestClient.
-
-const ERROR_SIGNALS = [
-  'FlutterError',
-  'Exception',
-  'Expected:',
-  'Actual:',
-  '══',
-  'FAILURES!!!',
-  'INSTRUMENTATION_CODE',
-  'Error:',
-  'TimeoutException',
-  'StateError',
-  'Unhandled',
-];
-
-function validateBuildId(id: unknown): string {
-  if (typeof id !== 'string' || !/^\d+$/.test(id)) {
-    throw new Error('build_id must be a numeric string (e.g. "19305815")');
-  }
-  return id;
-}
-
-function validateSessionId(id: unknown): string {
-  if (typeof id !== 'string' || !/^[A-Za-z0-9._-]+$/.test(id)) {
-    throw new Error(
-      'session_id must contain only alphanumeric characters, dots, hyphens, or underscores',
-    );
-  }
-  return id;
-}
-
-function extractErrorBlock(log: string): string {
-  const lines = log.split('\n');
-  const marked = new Set<number>();
-
-  lines.forEach((line, i) => {
-    if (ERROR_SIGNALS.some((s) => line.includes(s))) {
-      for (let j = Math.max(0, i - 5); j <= Math.min(lines.length - 1, i + 20); j++) {
-        marked.add(j);
-      }
-    }
-  });
-
-  if (marked.size === 0) {
-    return lines
-      .slice(-60)
-      .map((l, i) => `${lines.length - 60 + i + 1}: ${l}`)
-      .join('\n');
-  }
-
-  const sorted = [...marked].sort((a, b) => a - b);
-  return sorted.map((i) => `${i + 1}: ${lines[i]}`).join('\n');
-}
+import { validateBuildId, validateSessionId, extractErrorBlock } from '../src/index.js';
 
 describe('Server Logic (index.ts)', () => {
   describe('validateBuildId', () => {
@@ -104,6 +49,15 @@ describe('Server Logic (index.ts)', () => {
       expect(lines.length).toBe(60);
       expect(lines[0]).toBe('41: line 41');
       expect(lines[59]).toBe('100: line 100');
+    });
+
+    it('should handle logs with fewer than 60 lines gracefully', () => {
+      const log = 'line 1\nline 2';
+      const result = extractErrorBlock(log);
+      const lines = result.split('\n');
+      expect(lines.length).toBe(2);
+      expect(lines[0]).toBe('1: line 1');
+      expect(lines[1]).toBe('2: line 2');
     });
   });
 });
