@@ -1,6 +1,6 @@
 {
   "name": "lambda-test-mcp",
-  "version": "1.1.2",
+  "version": "1.1.1",
   "description": "MCP server for LambdaTest Automation — fetch sessions, logs, and video URLs.",
   "type": "module",
   "author": {
