@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { realpathSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { z } from 'zod';
 import { LambdaTestClient, type LTSession } from './api.js';
@@ -187,8 +188,11 @@ export async function runServer() {
   await server.connect(transport);
 }
 
-// Only run if executed directly
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+// Only run if executed directly.
+// Use realpathSync to resolve npm bin symlinks before comparing — without it,
+// process.argv[1] is the .bin/ symlink path while import.meta.url is the real
+// file path, so isMain is always false when invoked via `npx`.
+const isMain = realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   runServer().catch((err) => {
     process.stderr.write(`Error: ${err.message}\n`);
